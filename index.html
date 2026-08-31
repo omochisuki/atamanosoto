@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>頭の外</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header class="header">
+      <h1>頭の外</h1>
+      <p>頭の中に置いておかなくていい。</p>
+    </header>
+
+
+    <section class="input-section">
+
+      <label for="memo">
+        今、頭に浮かんだこと
+      </label>
+
+      <textarea
+        id="memo"
+        placeholder="思いついたことを、雑にどうぞ。&#10;&#10;例：美容院&#10;旅行のホテル探す&#10;あの服どうしよう"
+      ></textarea>
+
+      <button id="saveButton">
+        外に出す
+      </button>
+
+    </section>
+
+
+    <section class="memory-section">
+
+      <div class="section-title">
+        <h2>最近、頭の外に出したこと</h2>
+
+        <button id="clearButton" class="clear-button">
+          すべて削除
+        </button>
+      </div>
+
+      <div id="memoList" class="memo-list">
+        <!-- JavaScriptでここに記録が入ります -->
+      </div>
+
+      <p id="emptyMessage" class="empty-message">
+        まだ何もありません。<br>
+        思いついたことを、ひとまず外に出してみよう。
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
