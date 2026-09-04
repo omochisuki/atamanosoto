@@ -1,23 +1,14 @@
 // ========================================
-// 頭の外 v0.3
-// タップ式カテゴリー版
+// 頭の外 v0.4
+// 自由カテゴリー版
 // ========================================
 
-const STORAGE_KEY = "atamanosoto_memos";
 
-const CATEGORIES = [
-  "生活TODO",
-  "ハンドメイドメモ",
-  "美容メモ",
-  "その他"
-];
+const MEMO_STORAGE_KEY =
+  "atamanosoto_memos";
 
-const CATEGORY_ICONS = {
-  "生活TODO": "📋",
-  "ハンドメイドメモ": "🧵",
-  "美容メモ": "💄",
-  "その他": "📁"
-};
+const CATEGORY_STORAGE_KEY =
+  "atamanosoto_categories";
 
 
 // ========================================
@@ -49,16 +40,34 @@ const listTitle =
   document.getElementById("listTitle");
 
 const categoryTabs =
-  document.querySelectorAll(".category-tab");
+  document.querySelectorAll(
+    ".category-tab"
+  );
+
+const categoryTabsContainer =
+  document.getElementById(
+    "categoryTabs"
+  );
+
+const addCategoryButton =
+  document.getElementById(
+    "addCategoryButton"
+  );
 
 const detailModal =
-  document.getElementById("detailModal");
+  document.getElementById(
+    "detailModal"
+  );
 
 const detailContent =
-  document.getElementById("detailContent");
+  document.getElementById(
+    "detailContent"
+  );
 
 const closeModal =
-  document.getElementById("closeModal");
+  document.getElementById(
+    "closeModal"
+  );
 
 
 // ========================================
@@ -67,13 +76,15 @@ const closeModal =
 
 let memos = loadMemos();
 
+let categories = loadCategories();
+
 let selectedImage = null;
 
 let currentCategory = "すべて";
 
 
 // ========================================
-// Load
+// Load Memos
 // ========================================
 
 function loadMemos() {
@@ -81,7 +92,58 @@ function loadMemos() {
   try {
 
     const saved =
-      localStorage.getItem(STORAGE_KEY);
+      localStorage.getItem(
+        MEMO_STORAGE_KEY
+      );
+
+    if (!saved) {
+      return [];
+    }
+
+    const loaded =
+      JSON.parse(saved);
+
+
+    // 古いバージョンのカテゴリーにも対応
+
+    return loaded.map(
+      function (memo) {
+
+        if (!memo.category) {
+
+          memo.category =
+            "分類なし";
+
+        }
+
+        return memo;
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    return [];
+
+  }
+
+}
+
+
+// ========================================
+// Load Categories
+// ========================================
+
+function loadCategories() {
+
+  try {
+
+    const saved =
+      localStorage.getItem(
+        CATEGORY_STORAGE_KEY
+      );
 
     if (!saved) {
       return [];
@@ -109,7 +171,7 @@ function saveMemos() {
   try {
 
     localStorage.setItem(
-      STORAGE_KEY,
+      MEMO_STORAGE_KEY,
       JSON.stringify(memos)
     );
 
@@ -127,6 +189,16 @@ function saveMemos() {
 }
 
 
+function saveCategories() {
+
+  localStorage.setItem(
+    CATEGORY_STORAGE_KEY,
+    JSON.stringify(categories)
+  );
+
+}
+
+
 // ========================================
 // Image
 // ========================================
@@ -135,13 +207,18 @@ imageInput.addEventListener(
   "change",
   function () {
 
-    const file = this.files[0];
+    const file =
+      this.files[0];
 
     if (!file) {
       return;
     }
 
-    if (!file.type.startsWith("image/")) {
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
 
       alert(
         "画像ファイルを選択してください。"
@@ -151,8 +228,10 @@ imageInput.addEventListener(
 
     }
 
+
     const reader =
       new FileReader();
+
 
     reader.onload =
       function (event) {
@@ -165,6 +244,7 @@ imageInput.addEventListener(
         );
 
       };
+
 
     reader.readAsDataURL(file);
 
@@ -179,6 +259,7 @@ imageInput.addEventListener(
 function showImagePreview(image) {
 
   imagePreview.innerHTML = "";
+
 
   const img =
     document.createElement("img");
@@ -253,7 +334,7 @@ saveButton.addEventListener(
 
       image: selectedImage,
 
-      category: "その他",
+      category: "分類なし",
 
       completed: false,
 
@@ -268,6 +349,8 @@ saveButton.addEventListener(
     saveMemos();
 
 
+    // Reset
+
     memoInput.value = "";
 
     selectedImage = null;
@@ -277,14 +360,75 @@ saveButton.addEventListener(
     imagePreview.innerHTML = "";
 
 
-    renderMemos();
+    renderAll();
 
   }
 );
 
 
 // ========================================
-// Category Tabs
+// Render Category Tabs
+// ========================================
+
+function renderCategoryTabs() {
+
+  categoryTabsContainer.innerHTML = "";
+
+
+  categories.forEach(
+    function (category) {
+
+      const button =
+        document.createElement("button");
+
+      button.className =
+        "category-tab";
+
+
+      button.dataset.category =
+        category;
+
+
+      button.textContent =
+        category;
+
+
+      if (
+        currentCategory ===
+        category
+      ) {
+
+        button.classList.add(
+          "active"
+        );
+
+      }
+
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          selectCategory(
+            category
+          );
+
+        }
+      );
+
+
+      categoryTabsContainer.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+// ========================================
+// Category Select
 // ========================================
 
 categoryTabs.forEach(
@@ -294,25 +438,9 @@ categoryTabs.forEach(
       "click",
       function () {
 
-        currentCategory =
-          this.dataset.category;
-
-
-        categoryTabs.forEach(
-          function (item) {
-
-            item.classList.remove(
-              "active"
-            );
-
-          }
+        selectCategory(
+          this.dataset.category
         );
-
-
-        this.classList.add("active");
-
-
-        renderMemos();
 
       }
     );
@@ -321,8 +449,446 @@ categoryTabs.forEach(
 );
 
 
+function selectCategory(
+  category
+) {
+
+  currentCategory =
+    category;
+
+
+  document
+    .querySelectorAll(
+      ".category-tab"
+    )
+    .forEach(
+      function (button) {
+
+        button.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".category-tab"
+    )
+    .forEach(
+      function (button) {
+
+        if (
+          button.dataset.category ===
+          category
+        ) {
+
+          button.classList.add(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+
+  renderAll();
+
+}
+
+
+// ========================================
+// Add Category
+// ========================================
+
+addCategoryButton.addEventListener(
+  "click",
+  function () {
+
+    showNewCategoryForm();
+
+  }
+);
+
+
+// ========================================
+// New Category Form
+// ========================================
+
+function showNewCategoryForm(
+  memo = null
+) {
+
+  detailContent.innerHTML = "";
+
+
+  const title =
+    document.createElement("h3");
+
+  title.textContent =
+    memo
+      ? "カテゴリーを変更"
+      : "新しいカテゴリー";
+
+
+  title.style.marginTop =
+    "0";
+
+
+  detailContent.appendChild(
+    title
+  );
+
+
+  const description =
+    document.createElement("p");
+
+  description.textContent =
+    memo
+      ? "このメモをどこに入れる？"
+      : "好きな名前をつけてください。";
+
+
+  description.style.color =
+    "#888";
+
+
+  description.style.fontSize =
+    "13px";
+
+
+  detailContent.appendChild(
+    description
+  );
+
+
+  // Existing categories
+
+  if (memo) {
+
+    const selector =
+      document.createElement(
+        "div"
+      );
+
+    selector.className =
+      "category-selector";
+
+
+    // 分類なし
+
+    selector.appendChild(
+      createCategorySelectButton(
+        "分類なし",
+        memo
+      )
+    );
+
+
+    categories.forEach(
+      function (category) {
+
+        selector.appendChild(
+          createCategorySelectButton(
+            category,
+            memo
+          )
+        );
+
+      }
+    );
+
+
+    // 新規カテゴリー
+
+    const newButton =
+      document.createElement("button");
+
+    newButton.className =
+      "category-select-button";
+
+    newButton.textContent =
+      "＋ 新しいカテゴリー";
+
+
+    newButton.addEventListener(
+      "click",
+      function () {
+
+        showNewCategoryForm(
+          memo
+        );
+
+      }
+    );
+
+
+    selector.appendChild(
+      newButton
+    );
+
+
+    detailContent.appendChild(
+      selector
+    );
+
+  }
+
+
+  // New category input
+
+  const form =
+    document.createElement("div");
+
+  form.className =
+    "new-category-form";
+
+
+  const input =
+    document.createElement("input");
+
+  input.type =
+    "text";
+
+  input.placeholder =
+    "例：旅行、買い物、仕事";
+
+  input.className =
+    "new-category-input";
+
+
+  const buttons =
+    document.createElement("div");
+
+  buttons.className =
+    "new-category-buttons";
+
+
+  const cancel =
+    document.createElement("button");
+
+  cancel.textContent =
+    "キャンセル";
+
+
+  cancel.addEventListener(
+    "click",
+    function () {
+
+      if (memo) {
+
+        showCategorySelector(
+          memo
+        );
+
+      }
+
+      else {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+  const create =
+    document.createElement("button");
+
+  create.textContent =
+    "作成";
+
+  create.className =
+    "primary";
+
+
+  create.addEventListener(
+    "click",
+    function () {
+
+      const name =
+        input.value.trim();
+
+
+      if (!name) {
+
+        alert(
+          "カテゴリー名を入力してください。"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        name === "すべて" ||
+        name === "分類なし"
+      ) {
+
+        alert(
+          "その名前は使えません。"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        categories.includes(name)
+      ) {
+
+        alert(
+          "そのカテゴリーはすでにあります。"
+        );
+
+        return;
+
+      }
+
+
+      categories.push(name);
+
+      saveCategories();
+
+
+      // メモから作った場合
+      // そのままそのカテゴリーへ移動
+
+      if (memo) {
+
+        memo.category =
+          name;
+
+        saveMemos();
+
+      }
+
+
+      detailModal.classList.remove(
+        "show"
+      );
+
+
+      currentCategory =
+        name;
+
+
+      renderAll();
+
+    }
+  );
+
+
+  buttons.appendChild(cancel);
+
+  buttons.appendChild(create);
+
+
+  form.appendChild(input);
+
+  form.appendChild(buttons);
+
+
+  detailContent.appendChild(
+    form
+  );
+
+
+  detailModal.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    function () {
+
+      input.focus();
+
+    },
+    50
+  );
+
+}
+
+
+// ========================================
+// Category Select Button
+// ========================================
+
+function createCategorySelectButton(
+  category,
+  memo
+) {
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "category-select-button";
+
+
+  button.textContent =
+    category;
+
+
+  if (
+    memo.category ===
+    category
+  ) {
+
+    button.classList.add(
+      "selected"
+    );
+
+  }
+
+
+  button.addEventListener(
+    "click",
+    function () {
+
+      memo.category =
+        category;
+
+      saveMemos();
+
+
+      detailModal.classList.remove(
+        "show"
+      );
+
+
+      renderAll();
+
+    }
+  );
+
+
+  return button;
+
+}
+
+
 // ========================================
 // Render
+// ========================================
+
+function renderAll() {
+
+  renderCategoryTabs();
+
+  renderMemos();
+
+}
+
+
+// ========================================
+// Render Memos
 // ========================================
 
 function renderMemos() {
@@ -333,21 +899,29 @@ function renderMemos() {
   let visibleMemos;
 
 
+  // ALL
+
   if (
     currentCategory ===
     "すべて"
   ) {
 
-    visibleMemos = memos;
+    visibleMemos =
+      memos;
+
 
     listTitle.textContent =
       "すべての記録";
+
 
     renderAllGroups(
       visibleMemos
     );
 
   }
+
+
+  // OTHER CATEGORY
 
   else {
 
@@ -364,8 +938,22 @@ function renderMemos() {
       );
 
 
-    listTitle.textContent =
-      currentCategory;
+    if (
+      currentCategory ===
+      "分類なし"
+    ) {
+
+      listTitle.textContent =
+        "未分類";
+
+    }
+
+    else {
+
+      listTitle.textContent =
+        currentCategory;
+
+    }
 
 
     renderSingleGroup(
@@ -376,7 +964,10 @@ function renderMemos() {
   }
 
 
-  if (visibleMemos.length === 0) {
+  if (
+    visibleMemos.length ===
+    0
+  ) {
 
     emptyMessage.style.display =
       "block";
@@ -397,9 +988,41 @@ function renderMemos() {
 // All Groups
 // ========================================
 
-function renderAllGroups(memoArray) {
+function renderAllGroups(
+  memoArray
+) {
 
-  CATEGORIES.forEach(
+  // 分類なし
+
+  const uncategorized =
+    memoArray.filter(
+      function (memo) {
+
+        return (
+          !memo.category ||
+          memo.category ===
+          "分類なし"
+        );
+
+      }
+    );
+
+
+  if (
+    uncategorized.length > 0
+  ) {
+
+    createCategoryGroup(
+      "分類なし",
+      uncategorized
+    );
+
+  }
+
+
+  // User Categories
+
+  categories.forEach(
     function (category) {
 
       const categoryMemos =
@@ -416,7 +1039,8 @@ function renderAllGroups(memoArray) {
 
 
       if (
-        categoryMemos.length === 0
+        categoryMemos.length ===
+        0
       ) {
 
         return;
@@ -444,8 +1068,13 @@ function renderSingleGroup(
   category
 ) {
 
-  if (memoArray.length === 0) {
+  if (
+    memoArray.length ===
+    0
+  ) {
+
     return;
+
   }
 
 
@@ -481,8 +1110,6 @@ function createCategoryGroup(
 
 
   title.textContent =
-    CATEGORY_ICONS[category] +
-    " " +
     category;
 
 
@@ -498,7 +1125,6 @@ function createCategoryGroup(
 
 
   title.appendChild(count);
-
 
   group.appendChild(title);
 
@@ -537,7 +1163,8 @@ function createMemoCard(memo) {
   const card =
     document.createElement("article");
 
-  card.className = "memo";
+  card.className =
+    "memo";
 
 
   if (memo.completed) {
@@ -548,6 +1175,8 @@ function createMemoCard(memo) {
 
   }
 
+
+  // Main
 
   const main =
     document.createElement("div");
@@ -655,6 +1284,7 @@ function createMemoCard(memo) {
       memo.createdAt
     );
 
+
   body.appendChild(date);
 
 
@@ -667,9 +1297,9 @@ function createMemoCard(memo) {
     "memo-category";
 
   category.textContent =
-    CATEGORY_ICONS[memo.category] +
-    " " +
-    memo.category;
+    memo.category ||
+    "分類なし";
+
 
   body.appendChild(category);
 
@@ -724,7 +1354,9 @@ function createMemoCard(memo) {
     "click",
     function () {
 
-      showCategorySelector(memo);
+      showCategorySelector(
+        memo
+      );
 
     }
   );
@@ -737,6 +1369,7 @@ function createMemoCard(memo) {
   actions.appendChild(
     categoryButton
   );
+
 
   card.appendChild(actions);
 
@@ -773,7 +1406,8 @@ function createMemoCard(memo) {
           function (item) {
 
             return (
-              item.id !== memo.id
+              item.id !==
+              memo.id
             );
 
           }
@@ -782,7 +1416,7 @@ function createMemoCard(memo) {
 
       saveMemos();
 
-      renderMemos();
+      renderAll();
 
     }
   );
@@ -799,12 +1433,12 @@ function createMemoCard(memo) {
 
 
 // ========================================
-// ★ タップ式カテゴリー選択
+// Category Selector
 // ========================================
 
-function showCategorySelector(memo) {
-
-  // モーダルの中身を作り直す
+function showCategorySelector(
+  memo
+) {
 
   detailContent.innerHTML = "";
 
@@ -815,9 +1449,13 @@ function showCategorySelector(memo) {
   title.textContent =
     "カテゴリーを選ぶ";
 
-  title.style.marginTop = "0";
+  title.style.marginTop =
+    "0";
 
-  detailContent.appendChild(title);
+
+  detailContent.appendChild(
+    title
+  );
 
 
   const description =
@@ -832,71 +1470,73 @@ function showCategorySelector(memo) {
   description.style.fontSize =
     "13px";
 
+
   detailContent.appendChild(
     description
   );
 
 
-  // カテゴリーボタン
-
   const selector =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   selector.className =
     "category-selector";
 
 
-  CATEGORIES.forEach(
+  // Uncategorized
+
+  selector.appendChild(
+    createCategorySelectButton(
+      "分類なし",
+      memo
+    )
+  );
+
+
+  // Existing
+
+  categories.forEach(
     function (category) {
 
-      const button =
-        document.createElement("button");
-
-      button.className =
-        "category-select-button";
-
-
-      button.textContent =
-        CATEGORY_ICONS[category] +
-        " " +
-        category;
-
-
-      // 現在のカテゴリー
-
-      if (
-        memo.category === category
-      ) {
-
-        button.classList.add(
-          "selected"
-        );
-
-      }
-
-
-      button.addEventListener(
-        "click",
-        function () {
-
-          memo.category =
-            category;
-
-          saveMemos();
-
-          detailModal.classList.remove(
-            "show"
-          );
-
-          renderMemos();
-
-        }
+      selector.appendChild(
+        createCategorySelectButton(
+          category,
+          memo
+        )
       );
 
+    }
+  );
 
-      selector.appendChild(button);
+
+  // New
+
+  const newButton =
+    document.createElement("button");
+
+  newButton.className =
+    "category-select-button";
+
+  newButton.textContent =
+    "＋ 新しいカテゴリー";
+
+
+  newButton.addEventListener(
+    "click",
+    function () {
+
+      showNewCategoryForm(
+        memo
+      );
 
     }
+  );
+
+
+  selector.appendChild(
+    newButton
   );
 
 
@@ -965,9 +1605,11 @@ function showDetail(memo) {
 
 
   info.textContent =
-    CATEGORY_ICONS[memo.category] +
-    " " +
-    memo.category +
+    "カテゴリー： " +
+    (
+      memo.category ||
+      "分類なし"
+    ) +
     "\n" +
     (
       memo.completed
@@ -980,7 +1622,9 @@ function showDetail(memo) {
     );
 
 
-  detailContent.appendChild(info);
+  detailContent.appendChild(
+    info
+  );
 
 
   detailModal.classList.add(
@@ -998,9 +1642,7 @@ closeModal.addEventListener(
   "click",
   function () {
 
-    detailModal.classList.remove(
-      "show"
-    );
+    closeModalWindow();
 
   }
 );
@@ -1015,9 +1657,7 @@ detailModal.addEventListener(
       detailModal
     ) {
 
-      detailModal.classList.remove(
-        "show"
-      );
+      closeModalWindow();
 
     }
 
@@ -1025,16 +1665,30 @@ detailModal.addEventListener(
 );
 
 
+function closeModalWindow() {
+
+  detailModal.classList.remove(
+    "show"
+  );
+
+}
+
+
 // ========================================
-// Clear All
+// Clear
 // ========================================
 
 clearButton.addEventListener(
   "click",
   function () {
 
-    if (memos.length === 0) {
+    if (
+      memos.length ===
+      0
+    ) {
+
       return;
+
     }
 
 
@@ -1054,7 +1708,7 @@ clearButton.addEventListener(
 
     saveMemos();
 
-    renderMemos();
+    renderAll();
 
   }
 );
@@ -1090,4 +1744,4 @@ function formatDate(
 // Start
 // ========================================
 
-renderMemos();
+renderAll();

@@ -229,6 +229,8 @@ textarea::placeholder {
 .category-nav {
   display: flex;
 
+  align-items: center;
+
   gap: 8px;
 
   margin-top: 34px;
@@ -242,9 +244,8 @@ textarea::placeholder {
   border-radius: 12px;
 }
 
-.category-tab {
-  flex: 1;
-
+.category-tab,
+.add-category-tab {
   min-width: max-content;
 
   padding: 10px 13px;
@@ -269,6 +270,29 @@ textarea::placeholder {
 
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.add-category-tab {
+  color: #555;
+
+  border-left: 1px solid #d8d6d1;
+
+  border-radius: 0 9px 9px 0;
+}
+
+.add-category-tab:hover {
+  background: #f7f6f2;
+}
+
+
+/* =====================
+   Category Tab Container
+===================== */
+
+#categoryTabs {
+  display: flex;
+
+  gap: 8px;
 }
 
 
@@ -345,7 +369,7 @@ textarea::placeholder {
 
 
 /* =====================
-   Memo
+   Memo List
 ===================== */
 
 .memo-list {
@@ -355,6 +379,11 @@ textarea::placeholder {
 
   gap: 10px;
 }
+
+
+/* =====================
+   Memo
+===================== */
 
 .memo {
   position: relative;
@@ -476,6 +505,8 @@ textarea::placeholder {
   margin-top: 13px;
 
   padding-left: 31px;
+
+  flex-wrap: wrap;
 }
 
 .action-button {
@@ -604,6 +635,11 @@ textarea::placeholder {
   font-size: 20px;
 }
 
+
+/* =====================
+   Detail
+===================== */
+
 .detail-text {
   margin: 0 0 18px;
 
@@ -638,6 +674,110 @@ textarea::placeholder {
 
 
 /* =====================
+   Category Selector
+===================== */
+
+.category-selector {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.category-select-button {
+  width: 100%;
+
+  padding: 15px;
+
+  border: 1px solid #e3e1dc;
+
+  border-radius: 12px;
+
+  background: #fff;
+
+  color: #555;
+
+  font-size: 14px;
+
+  text-align: left;
+}
+
+.category-select-button:hover {
+  background: #f7f6f2;
+}
+
+.category-select-button.selected {
+  border-color: #777;
+
+  background: #f3f2ee;
+
+  color: #333;
+
+  font-weight: 500;
+}
+
+
+/* =====================
+   New Category
+===================== */
+
+.new-category-form {
+  margin-top: 20px;
+}
+
+.new-category-input {
+  width: 100%;
+
+  padding: 13px 14px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  font-size: 15px;
+}
+
+.new-category-input:focus {
+  border-color: #999;
+}
+
+.new-category-buttons {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.new-category-buttons button {
+  flex: 1;
+
+  padding: 11px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  color: #555;
+}
+
+.new-category-buttons .primary {
+  background: #333;
+
+  color: #fff;
+
+  border-color: #333;
+}
+
+
+/* =====================
    Smartphone
 ===================== */
 
@@ -665,10 +805,12 @@ textarea::placeholder {
 
   .category-nav {
     margin-left: -6px;
+
     margin-right: -6px;
   }
 
-  .category-tab {
+  .category-tab,
+  .add-category-tab {
     padding: 9px 11px;
   }
 
@@ -683,48 +825,5 @@ textarea::placeholder {
   .modal-content {
     padding: 24px 20px;
   }
-
-  /* =====================
-   Category Selector
-===================== */
-
-.category-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  margin-top: 20px;
-}
-
-.category-select-button {
-  width: 100%;
-
-  padding: 15px;
-
-  border: 1px solid #e3e1dc;
-  border-radius: 12px;
-
-  background: #fff;
-
-  color: #555;
-
-  font-size: 14px;
-
-  text-align: left;
-}
-
-.category-select-button:hover {
-  background: #f7f6f2;
-}
-
-.category-select-button.selected {
-  border-color: #777;
-
-  background: #f3f2ee;
-
-  color: #333;
-
-  font-weight: 500;
-}
 
 }
