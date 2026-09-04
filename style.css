@@ -1,11 +1,18 @@
+/* =====================
+   Base
+===================== */
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+
   background: #f7f6f2;
+
   color: #333;
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -16,74 +23,106 @@ body {
     sans-serif;
 }
 
-.app {
-  width: min(720px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 64px 0 80px;
+button,
+textarea,
+input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 
-/* --------------------
+/* =====================
+   App
+===================== */
+
+.app {
+  width: min(720px, calc(100% - 32px));
+
+  margin: 0 auto;
+
+  padding: 60px 0 80px;
+}
+
+
+/* =====================
    Header
--------------------- */
+===================== */
 
 .header {
   text-align: center;
-  margin-bottom: 48px;
+
+  margin-bottom: 40px;
 }
 
 .header h1 {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
+
   font-size: 32px;
+
   font-weight: 500;
+
   letter-spacing: 0.08em;
 }
 
 .header p {
   margin: 0;
+
   color: #888;
+
   font-size: 14px;
 }
 
 
-/* --------------------
+/* =====================
    Input
--------------------- */
+===================== */
 
 .input-section {
+  padding: 26px;
+
   background: #fff;
+
   border-radius: 20px;
-  padding: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-.input-section label {
+.input-section > label {
   display: block;
+
   margin-bottom: 12px;
-  font-size: 14px;
+
   color: #777;
+
+  font-size: 14px;
 }
 
 textarea {
   width: 100%;
-  min-height: 150px;
+
+  min-height: 140px;
 
   padding: 16px;
 
   border: 1px solid #e5e3de;
+
   border-radius: 12px;
 
   background: #fafaf8;
 
-  font-family: inherit;
+  color: #333;
+
   font-size: 16px;
+
   line-height: 1.7;
 
   resize: vertical;
 
   outline: none;
-
-  transition: border-color 0.2s;
 }
 
 textarea:focus {
@@ -95,157 +134,180 @@ textarea::placeholder {
 }
 
 
-/* --------------------
-   Button
--------------------- */
+/* =====================
+   Image
+===================== */
+
+.image-area {
+  margin-top: 14px;
+}
+
+.image-button {
+  display: inline-flex !important;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 15px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  color: #666;
+
+  font-size: 14px;
+}
+
+.image-button:hover {
+  background: #f7f7f7;
+}
+
+#imagePreview {
+  margin-top: 12px;
+}
+
+.preview-image {
+  display: block;
+
+  width: 120px;
+  height: 120px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+}
+
+.remove-preview {
+  margin-top: 6px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #999;
+
+  font-size: 12px;
+}
+
+
+/* =====================
+   Save
+===================== */
 
 #saveButton {
   width: 100%;
 
-  margin-top: 16px;
+  margin-top: 20px;
+
   padding: 14px;
 
   border: none;
+
   border-radius: 12px;
 
   background: #333;
+
   color: #fff;
 
-  font-family: inherit;
   font-size: 15px;
-
-  cursor: pointer;
-
-  transition:
-    opacity 0.2s,
-    transform 0.1s;
 }
 
 #saveButton:hover {
   opacity: 0.85;
 }
 
-#saveButton:active {
-  transform: scale(0.99);
+
+/* =====================
+   Category Navigation
+===================== */
+
+.category-nav {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 34px;
+
+  padding: 5px;
+
+  overflow-x: auto;
+
+  background: #ebe9e4;
+
+  border-radius: 12px;
+}
+
+.category-tab {
+  flex: 1;
+
+  min-width: max-content;
+
+  padding: 10px 13px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #777;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+.category-tab.active {
+  background: #fff;
+
+  color: #333;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 
-/* --------------------
+/* =====================
    Memory
--------------------- */
+===================== */
 
 .memory-section {
-  margin-top: 56px;
+  margin-top: 38px;
 }
 
 .section-title {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
 
-  margin-bottom: 20px;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
 }
 
 .section-title h2 {
   margin: 0;
 
-  font-size: 16px;
+  font-size: 17px;
+
   font-weight: 500;
 }
 
-
-/* --------------------
-   Memo
--------------------- */
-
-.memo-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.memo {
-  position: relative;
-
-  background: #fff;
-
-  padding: 20px 48px 20px 20px;
-
-  border-radius: 14px;
-
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-}
-
-.memo-text {
-  margin: 0 0 10px;
-
-  font-size: 15px;
-  line-height: 1.8;
-
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-}
-
-.memo-date {
-  color: #aaa;
-  font-size: 12px;
-}
-
-.delete-button {
-  position: absolute;
-
-  top: 16px;
-  right: 16px;
-
-  width: 28px;
-  height: 28px;
-
-  border: none;
-  border-radius: 50%;
-
-  background: transparent;
-  color: #aaa;
-
-  font-size: 16px;
-
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background: #f3f3f3;
-}
-
-
-/* --------------------
-   Empty
--------------------- */
-
-.empty-message {
-  margin: 40px 0;
-
-  text-align: center;
-
-  color: #aaa;
-
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-
-/* --------------------
-   Clear
--------------------- */
-
 .clear-button {
+  padding: 0;
+
   border: none;
+
   background: transparent;
 
   color: #aaa;
 
-  font-family: inherit;
   font-size: 12px;
-
-  cursor: pointer;
 }
 
 .clear-button:hover {
@@ -253,19 +315,338 @@ textarea::placeholder {
 }
 
 
-/* --------------------
+/* =====================
+   Category Group
+===================== */
+
+.category-group {
+  margin-bottom: 32px;
+}
+
+.category-group-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin: 0 0 12px;
+
+  font-size: 15px;
+
+  font-weight: 500;
+}
+
+.category-count {
+  color: #aaa;
+
+  font-size: 11px;
+}
+
+
+/* =====================
+   Memo
+===================== */
+
+.memo-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.memo {
+  position: relative;
+
+  padding: 18px;
+
+  background: #fff;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.memo-main {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+}
+
+.memo-check {
+  width: 19px;
+  height: 19px;
+
+  margin-top: 3px;
+
+  flex-shrink: 0;
+}
+
+.memo-body {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.memo-text {
+  margin: 0;
+
+  padding-right: 24px;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+  white-space: pre-wrap;
+
+  overflow-wrap: break-word;
+}
+
+.memo.completed .memo-text {
+  color: #aaa;
+
+  text-decoration: line-through;
+}
+
+.memo-date {
+  margin-top: 8px;
+
+  color: #aaa;
+
+  font-size: 11px;
+}
+
+
+/* =====================
+   Memo Image
+===================== */
+
+.memo-image {
+  display: block;
+
+  width: 180px;
+  max-width: 100%;
+
+  max-height: 180px;
+
+  margin-top: 12px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+
+/* =====================
+   Category Label
+===================== */
+
+.memo-category {
+  display: inline-block;
+
+  margin-top: 10px;
+
+  padding: 5px 9px;
+
+  border-radius: 8px;
+
+  background: #f3f2ee;
+
+  color: #777;
+
+  font-size: 11px;
+}
+
+
+/* =====================
+   Actions
+===================== */
+
+.memo-actions {
+  display: flex;
+
+  gap: 7px;
+
+  margin-top: 13px;
+
+  padding-left: 31px;
+}
+
+.action-button {
+  padding: 7px 10px;
+
+  border: 1px solid #e5e3de;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #777;
+
+  font-size: 11px;
+}
+
+.action-button:hover {
+  background: #f7f7f7;
+}
+
+
+/* =====================
+   Delete
+===================== */
+
+.delete-button {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 27px;
+  height: 27px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #aaa;
+
+  font-size: 16px;
+}
+
+.delete-button:hover {
+  background: #f3f3f3;
+}
+
+
+/* =====================
+   Empty
+===================== */
+
+.empty-message {
+  margin: 45px 0;
+
+  text-align: center;
+
+  color: #aaa;
+
+  font-size: 13px;
+
+  line-height: 1.8;
+}
+
+
+/* =====================
+   Modal
+===================== */
+
+.modal {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  position: relative;
+
+  width: min(600px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  padding: 28px;
+
+  background: #fff;
+
+  border-radius: 20px;
+}
+
+.close-modal {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 32px;
+  height: 32px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f3f3f3;
+
+  color: #777;
+
+  font-size: 20px;
+}
+
+.detail-text {
+  margin: 0 0 18px;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+}
+
+.detail-image {
+  display: block;
+
+  width: 100%;
+
+  max-height: 500px;
+
+  object-fit: contain;
+
+  border-radius: 12px;
+}
+
+.detail-info {
+  margin-top: 16px;
+
+  color: #999;
+
+  font-size: 12px;
+
+  line-height: 1.8;
+}
+
+
+/* =====================
    Smartphone
--------------------- */
+===================== */
 
 @media (max-width: 600px) {
 
   .app {
     width: calc(100% - 24px);
-    padding: 40px 0 60px;
-  }
 
-  .header {
-    margin-bottom: 32px;
+    padding: 38px 0 60px;
   }
 
   .header h1 {
@@ -274,19 +655,76 @@ textarea::placeholder {
 
   .input-section {
     padding: 20px;
+
     border-radius: 16px;
   }
 
   textarea {
-    min-height: 130px;
+    min-height: 125px;
   }
 
-  .memory-section {
-    margin-top: 40px;
+  .category-nav {
+    margin-left: -6px;
+    margin-right: -6px;
   }
 
-  .section-title h2 {
-    font-size: 15px;
+  .category-tab {
+    padding: 9px 11px;
   }
+
+  .memo {
+    padding: 16px;
+  }
+
+  .memo-actions {
+    padding-left: 31px;
+  }
+
+  .modal-content {
+    padding: 24px 20px;
+  }
+
+  /* =====================
+   Category Selector
+===================== */
+
+.category-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.category-select-button {
+  width: 100%;
+
+  padding: 15px;
+
+  border: 1px solid #e3e1dc;
+  border-radius: 12px;
+
+  background: #fff;
+
+  color: #555;
+
+  font-size: 14px;
+
+  text-align: left;
+}
+
+.category-select-button:hover {
+  background: #f7f6f2;
+}
+
+.category-select-button.selected {
+  border-color: #777;
+
+  background: #f3f2ee;
+
+  color: #333;
+
+  font-weight: 500;
+}
 
 }

@@ -1,23 +1,45 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>頭の外</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
+
 
 <body>
 
   <main class="app">
 
+    <!-- =====================
+         Header
+    ====================== -->
+
     <header class="header">
+
       <h1>頭の外</h1>
-      <p>頭の中に置いておかなくていい。</p>
+
+      <p>
+        頭の中に置いておかなくていい。
+      </p>
+
     </header>
 
+
+    <!-- =====================
+         Input
+    ====================== -->
 
     <section class="input-section">
 
@@ -27,8 +49,32 @@
 
       <textarea
         id="memo"
-        placeholder="思いついたことを、雑にどうぞ。&#10;&#10;例：美容院&#10;旅行のホテル探す&#10;あの服どうしよう"
+        placeholder="思いついたことを、雑にどうぞ。"
       ></textarea>
+
+
+      <!-- 画像 -->
+
+      <div class="image-area">
+
+        <label
+          for="imageInput"
+          class="image-button"
+        >
+          📷 画像を追加
+        </label>
+
+        <input
+          id="imageInput"
+          type="file"
+          accept="image/*"
+          hidden
+        >
+
+        <div id="imagePreview"></div>
+
+      </div>
+
 
       <button id="saveButton">
         外に出す
@@ -37,26 +83,110 @@
     </section>
 
 
+    <!-- =====================
+         Navigation
+    ====================== -->
+
+    <nav class="category-nav">
+
+      <button
+        class="category-tab active"
+        data-category="すべて"
+      >
+        すべて
+      </button>
+
+      <button
+        class="category-tab"
+        data-category="生活TODO"
+      >
+        📋 生活TODO
+      </button>
+
+      <button
+        class="category-tab"
+        data-category="ハンドメイドメモ"
+      >
+        🧵 ハンドメイド
+      </button>
+
+      <button
+        class="category-tab"
+        data-category="美容メモ"
+      >
+        💄 美容
+      </button>
+
+      <button
+        class="category-tab"
+        data-category="その他"
+      >
+        📁 その他
+      </button>
+
+    </nav>
+
+
+    <!-- =====================
+         Memo Area
+    ====================== -->
+
     <section class="memory-section">
 
       <div class="section-title">
-        <h2>最近、頭の外に出したこと</h2>
 
-        <button id="clearButton" class="clear-button">
+        <h2 id="listTitle">
+          すべての記録
+        </h2>
+
+        <button
+          id="clearButton"
+          class="clear-button"
+        >
           すべて削除
         </button>
+
       </div>
 
-      <div id="memoList" class="memo-list">
-        <!-- JavaScriptでここに記録が入ります -->
-      </div>
 
-      <p id="emptyMessage" class="empty-message">
+      <div id="memoList"></div>
+
+
+      <p
+        id="emptyMessage"
+        class="empty-message"
+      >
         まだ何もありません。<br>
         思いついたことを、ひとまず外に出してみよう。
       </p>
 
     </section>
+
+
+    <!-- =====================
+         Detail Modal
+    ====================== -->
+
+    <div
+      id="detailModal"
+      class="modal"
+    >
+
+      <div class="modal-content">
+
+        <button
+          id="closeModal"
+          class="close-modal"
+        >
+          ×
+        </button>
+
+        <div id="detailContent"></div>
+
+      </div>
+
+    </div>
+
 
   </main>
 
@@ -64,4 +194,5 @@
   <script src="script.js"></script>
 
 </body>
+
 </html>
